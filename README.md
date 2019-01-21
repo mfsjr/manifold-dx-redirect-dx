@@ -1,4 +1,18 @@
-# TypeScript library starter
+# React Router Integration for manifold-dx:  RedirectDx
+
+This library provides a manifold-dx state-based mechanism for routing within an application that uses
+React Router, and specifically the <Redirect> element.
+
+Some advantages to this are:
+1. Redirects can be done consistently throughout your app with a single line of code, by creating and dispatching an action, e.g.:
+  ```typescript jsx
+  getActionCreator(this.appState).update('redirectTo', 'search').dispatch();
+  ```
+2. URL changes are integrated into manifold-dx actions, so that action undo/redo will move forward and backward across app URL's as well.
+3. Deep linking is unaffected, since this library doesn't do anything until after the app is loaded.
+
+
+## TypeScript library starter
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![Greenkeeper badge](https://badges.greenkeeper.io/alexjoverm/typescript-library-starter.svg)](https://greenkeeper.io/)
