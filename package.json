@@ -9,10 +9,25 @@
   "files": [
     "dist"
   ],
-  "author": " <>",
+  "private": false,
+  "author": {
+    "name": "Matt Schleindl",
+    "email": "mattschleindl@yahoo.com"
+  },
+  "keywords": [
+    "react",
+    "react-router",
+    "typescript",
+    "manifold-dx",
+    "state",
+    "predictable",
+    "replay",
+    "flux",
+    "immutable"
+  ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/mfsjr/manifold-dx-redirect-dx"
   },
   "license": "MIT",
   "engines": {
