@@ -1,11 +1,10 @@
 {
   "name": "manifold-dx-redirect-dx",
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "",
   "keywords": [],
-  "main": "dist/manifold-dx-redirect-dx.umd.js",
-  "module": "dist/manifold-dx-redirect-dx.es5.js",
-  "typings": "dist/types/manifold-dx-redirect-dx.d.ts",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
