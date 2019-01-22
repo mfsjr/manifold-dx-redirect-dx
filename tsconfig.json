@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./dist/src",
     "moduleResolution": "node",
     "target": "es5",
     "module":"es2015",
@@ -11,7 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declarationDir": "dist",
     "outDir": "dist",
     "typeRoots": [
       "node_modules/@types"
