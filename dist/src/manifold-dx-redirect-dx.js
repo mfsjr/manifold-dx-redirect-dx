@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Import here Polyfills if needed. Recommended core-js (npm i -D core-js)
 // import "core-js/fn/array.find"
 // ...
@@ -6,5 +8,5 @@ var DummyClass = /** @class */ (function () {
     }
     return DummyClass;
 }());
-export default DummyClass;
+exports.default = DummyClass;
 //# sourceMappingURL=manifold-dx-redirect-dx.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -31,9 +32,10 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
-import * as React from 'react';
-import { Redirect, withRouter } from 'react-router';
-import { ContainerComponent, getMappingActionCreator } from 'manifold-dx';
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = require("react");
+var react_router_1 = require("react-router");
+var manifold_dx_1 = require("manifold-dx");
 /**
  * To use this component in an application, subclass it.  See instructions at {@link RedirectDx}.
  *
@@ -61,11 +63,12 @@ var history = [];
  * Return a copy of the state-based history.
  * TODO: provide a configurable cap to the max length of the history array, or integrate with manifold-dx action un/redo
  */
-export function getHistory() {
+function getHistory() {
     var result = [];
     result.concat(history);
     return result;
 }
+exports.getHistory = getHistory;
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
  * class-based components (the commented code above) or this functional component, and passed into
@@ -82,12 +85,12 @@ var RedirectDxView = function (props) {
     var newLocation = props.to !== props.history.location.pathname;
     if (newLocation && !props.initializing) {
         history.push(props.to.toString());
-        return (<Redirect {...props}/>);
+        return (React.createElement(react_router_1.Redirect, __assign({}, props)));
     }
     return (null);
 };
-var WithRouterRedirectDx = withRouter(RedirectDxView);
-export var factory = React.createFactory(WithRouterRedirectDx);
+var WithRouterRedirectDx = react_router_1.withRouter(RedirectDxView);
+exports.factory = React.createFactory(WithRouterRedirectDx);
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
  *
@@ -132,7 +135,7 @@ var RedirectDx = /** @class */ (function (_super) {
         var initFn = function (action) {
             _this.viewProps.initializing = false;
         };
-        mappingActions.push(getMappingActionCreator(this.props.redirectDxState, this.props.redirectDxProp)
+        mappingActions.push(manifold_dx_1.getMappingActionCreator(this.props.redirectDxState, this.props.redirectDxProp)
             .createPropertyMappingAction(this, 'to', initFn));
     };
     /**
@@ -143,6 +146,6 @@ var RedirectDx = /** @class */ (function (_super) {
         return __assign({}, redirectProps, { to: this.props.redirectDxProp, initializing: true });
     };
     return RedirectDx;
-}(ContainerComponent));
-export { RedirectDx };
-//# sourceMappingURL=RedirectDx.jsx.map
+}(manifold_dx_1.ContainerComponent));
+exports.RedirectDx = RedirectDx;
+//# sourceMappingURL=RedirectDx.js.map
