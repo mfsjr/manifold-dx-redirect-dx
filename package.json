@@ -2,14 +2,6 @@
   "name": "manifold-dx-redirect-dx",
   "version": "0.7.10",
   "description": "",
-  "keywords": [],
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
-  "private": false,
-  "author": {
-    "name": "Matt Schleindl",
-    "email": "mattschleindl@yahoo.com"
-  },
   "keywords": [
     "react",
     "react-router",
@@ -21,6 +13,13 @@
     "flux",
     "immutable"
   ],
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "private": false,
+  "author": {
+    "name": "Matt Schleindl",
+    "email": "mattschleindl@yahoo.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mfsjr/manifold-dx-redirect-dx"
@@ -128,8 +127,10 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
+    "@types/react": "^16.7.20",
     "@types/react-router": "^4.4.3",
     "manifold-dx": "^0.9.1",
+    "react": "^16.7.0",
     "react-router": "^4.3.1"
   }
 }
