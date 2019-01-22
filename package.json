@@ -1,13 +1,10 @@
 {
   "name": "manifold-dx-redirect-dx",
-  "version": "0.7.8",
+  "version": "0.7.9",
   "description": "",
   "keywords": [],
   "main": "dist/src/index.js",
-  "typings": "dist/src/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "types": "dist/src/index.d.ts",
   "private": false,
   "author": {
     "name": "Matt Schleindl",
