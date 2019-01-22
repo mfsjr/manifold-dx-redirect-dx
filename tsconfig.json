@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "rootDir": ".",
     "outDir": "dist",
     "typeRoots": [
       "node_modules/@types"
