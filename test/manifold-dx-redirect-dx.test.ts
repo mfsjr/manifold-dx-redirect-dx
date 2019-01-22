@@ -1,4 +1,4 @@
-import DummyClass from "../src/manifold-dx-redirect-dx"
+import DummyClass from "../src/manifold-dx-redirect-dx.ts"
 
 /**
  * Dummy test
