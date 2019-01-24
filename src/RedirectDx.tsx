@@ -1,11 +1,13 @@
+import { StateCrudAction } from 'manifold-dx/dist/src/actions/actions';
 import * as React from 'react';
 import { Omit, Redirect, RedirectProps, RouteComponentProps, withRouter } from 'react-router';
 import {
+  Action,
   AnyMappingAction,
   ContainerComponent,
   getMappingActionCreator,
-  MappingHook,
-  StateObject
+  MappingHook, State,
+  StateObject, Store
 } from 'manifold-dx';
 
 /**
@@ -31,16 +33,23 @@ import {
  *
  */
 
-const history: string[] = [];
-
 /**
- * Return a copy of the state-based history.
- * TODO: provide a configurable cap to the max length of the history array, or integrate with manifold-dx action un/redo
+ * Go through the action history for redirects, return the history of URL's.  Note that the first
+ * URL retrieved is meaningless, as its what state was initialized to, not the first app URL hit.
  */
-export function getHistory(): string[] {
-  let result: string[] = [];
-  result.concat(history);
-  return result;
+export function getHistory<S extends StateObject, A extends State<null>>
+    (props: RedirectDxProps<S>, store: Store<A>): string[] {
+  // get action history of changes to props.state[props.propertyName]
+  let actions: Action[] = store.getManager().getActionQueue().lastActions();
+  let redirectUrls: string[] = [];
+  actions.forEach((action) => {
+    if (action instanceof StateCrudAction) {
+      if (action.parent === props.redirectDxState && action.propertyName === props.redirectDxProp) {
+        redirectUrls.push(action.getOldValue());
+      }
+    }
+  });
+  return redirectUrls;
 }
 
 /*
@@ -58,11 +67,15 @@ interface RedirectDxViewProps extends RedirectProps {
   initializing: boolean;
 }
 
+/*tslint:disable:no-any*/
+type AnyRouteComponentProps = RouteComponentProps<any>;
+/*tslint:enable:no-any*/
+
 // enhanced view props (of the component passed into withRouter)
-interface RouteRedirectDxViewProps extends RedirectDxViewProps, RouteComponentProps<any> { }
+interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteComponentProps { }
 
 // enhanced view props (of the component returned by withRouter)
-type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof RouteComponentProps<any>>;
+type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
 
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
