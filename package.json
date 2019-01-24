@@ -134,7 +134,7 @@
   "dependencies": {
     "@types/react": "^16.7.20",
     "@types/react-router": "^4.4.3",
-    "manifold-dx": "^0.9.1",
+    "manifold-dx": "^0.9.2",
     "react": "^16.7.0",
     "react-router": "^4.3.1"
   }

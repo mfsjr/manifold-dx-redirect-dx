@@ -1,4 +1,3 @@
-import { StateCrudAction } from 'manifold-dx/dist/src/actions/actions';
 import * as React from 'react';
 import { Omit, Redirect, RedirectProps, RouteComponentProps, withRouter } from 'react-router';
 import {
@@ -6,7 +5,7 @@ import {
   AnyMappingAction,
   ContainerComponent,
   getMappingActionCreator,
-  MappingHook, State,
+  MappingHook, State, StateCrudAction,
   StateObject, Store
 } from 'manifold-dx';
 
@@ -38,7 +37,7 @@ import {
  * URL retrieved is meaningless, as its what state was initialized to, not the first app URL hit.
  */
 export function getHistory<S extends StateObject, A extends State<null>>
-    (props: RedirectDxProps<S>, store: Store<A>): string[] {
+(props: RedirectDxProps<S>, store: Store<A>): string[] {
   // get action history of changes to props.state[props.propertyName]
   let actions: Action[] = store.getManager().getActionQueue().lastActions();
   let redirectUrls: string[] = [];
@@ -75,7 +74,7 @@ type AnyRouteComponentProps = RouteComponentProps<any>;
 interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteComponentProps { }
 
 // enhanced view props (of the component returned by withRouter)
-type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
+export type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
 
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
@@ -92,7 +91,7 @@ const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps> = (props
   // We'll get warnings if we try to redirect to the same place, so we programmatically prevent that
   let newLocation = props.to !== props.history.location.pathname;
   if (newLocation && !props.initializing) {
-    history.push(props.to.toString());
+    // history.push(props.to.toString());
     return (<Redirect {...props} />);
   }
   return (null);
@@ -131,7 +130,7 @@ export const factory = React.createFactory(WithRouterRedirectDx);
  * @param S the state object containing the redirect URL
  * @param A the application state type definition or interface
  */
-export class RedirectDx<S extends StateObject, A extends StateObject>
+export class RedirectDx<S extends StateObject, A extends State<null>>
   extends ContainerComponent<RedirectDxProps<S>, WithRouterViewProps, A> {
 
   /**
