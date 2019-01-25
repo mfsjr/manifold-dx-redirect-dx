@@ -58,17 +58,41 @@ var manifold_dx_1 = require("manifold-dx");
  * to 'go back' is actually to undo manifold-dx actions.
  *
  */
+// /**
+//  * Go through the action history for redirects, return the history of URL's.  Note that the first
+//  * URL retrieved is meaningless, as its what state was initialized to, not the first app URL hit.
+//  */
+// export function getHistory<S extends StateObject, A extends State<null>>
+// (props: RedirectDxProps<S>, store: Store<A>): string[] {
+//   // get action history of changes to props.state[props.propertyName]
+//   let actions: Action[] = store.getManager().getActionQueue().lastActions();
+//   let redirectUrls: string[] = [];
+//   actions.forEach((action) => {
+//     if (action instanceof StateCrudAction) {
+//       if (action.parent === props.redirectDxState && action.propertyName === props.redirectDxProp) {
+//         redirectUrls.push(action.getOldValue());
+//       }
+//     }
+//   });
+//   return redirectUrls;
+// }
 var history = [];
-/**
- * Return a copy of the state-based history.
- * TODO: provide a configurable cap to the max length of the history array, or integrate with manifold-dx action un/redo
- */
 function getHistory() {
-    var result = [];
-    result.concat(history);
-    return result;
+    return history.slice();
 }
 exports.getHistory = getHistory;
+// Creating a render object makes spying/testing simple...
+exports.render = {
+    redirect: function (props, historyMax) {
+        var max = historyMax || 20;
+        if (max > 0 && max <= history.length) {
+            history.copyWithin(0, 1);
+        }
+        history.push(props.to.toString());
+        return (React.createElement(react_router_1.Redirect, __assign({}, props)));
+    },
+    nothing: function () { return (null); }
+};
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
  * class-based components (the commented code above) or this functional component, and passed into
@@ -80,16 +104,15 @@ exports.getHistory = getHistory;
  * @param props
  * @constructor
  */
-var RedirectDxView = function (props) {
+exports.RedirectDxView = function (props) {
     // We'll get warnings if we try to redirect to the same place, so we programmatically prevent that
     var newLocation = props.to !== props.history.location.pathname;
     if (newLocation && !props.initializing) {
-        history.push(props.to.toString());
-        return (React.createElement(react_router_1.Redirect, __assign({}, props)));
+        return exports.render.redirect(props);
     }
-    return (null);
+    return exports.render.nothing();
 };
-var WithRouterRedirectDx = react_router_1.withRouter(RedirectDxView);
+var WithRouterRedirectDx = react_router_1.withRouter(exports.RedirectDxView);
 exports.factory = React.createFactory(WithRouterRedirectDx);
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
@@ -143,7 +166,7 @@ var RedirectDx = /** @class */ (function (_super) {
      */
     RedirectDx.prototype.createViewProps = function () {
         var _a = this.props, children = _a.children, redirectDxState = _a.redirectDxState, redirectDxProp = _a.redirectDxProp, redirectProps = __rest(_a, ["children", "redirectDxState", "redirectDxProp"]);
-        return __assign({}, redirectProps, { to: this.props.redirectDxProp, initializing: true });
+        return __assign({}, redirectProps, { to: this.props.redirectDxProp, initializing: true, historyMax: 10 });
     };
     return RedirectDx;
 }(manifold_dx_1.ContainerComponent));

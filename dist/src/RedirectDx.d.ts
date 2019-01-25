@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { Omit, RedirectProps, RouteComponentProps } from 'react-router';
-import { AnyMappingAction, ContainerComponent, StateObject } from 'manifold-dx';
-/**
- * Return a copy of the state-based history.
- * TODO: provide a configurable cap to the max length of the history array, or integrate with manifold-dx action un/redo
- */
+import { AnyMappingAction, ContainerComponent, State, StateObject } from 'manifold-dx';
 export declare function getHistory(): string[];
 export interface RedirectDxProps<S extends StateObject> extends Partial<RedirectProps> {
     redirectDxState: S;
@@ -12,11 +8,29 @@ export interface RedirectDxProps<S extends StateObject> extends Partial<Redirect
 }
 interface RedirectDxViewProps extends RedirectProps {
     initializing: boolean;
+    historyMax?: number;
 }
-interface RouteRedirectDxViewProps extends RedirectDxViewProps, RouteComponentProps<any> {
+declare type AnyRouteComponentProps = RouteComponentProps<any>;
+export interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteComponentProps {
 }
-declare type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof RouteComponentProps<any>>;
-export declare const factory: React.ComponentFactory<Pick<RouteRedirectDxViewProps, "path" | "exact" | "strict" | "to" | "push" | "from" | "initializing">, React.Component<Pick<RouteRedirectDxViewProps, "path" | "exact" | "strict" | "to" | "push" | "from" | "initializing">, any, any>>;
+export declare type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
+export declare const render: {
+    redirect: (props: RouteRedirectDxViewProps, historyMax?: number | undefined) => JSX.Element;
+    nothing: () => null;
+};
+/**
+ * This is a functional component that shows how React's "createFactory" api can be used to handle either
+ * class-based components (the commented code above) or this functional component, and passed into
+ * ContainerComponent's FunctionComponent constructor argument.
+ *
+ * Note that we are using React Router's "Redirect" component, which wraps the history api so we don't
+ * have to worry about the browser's underlying implementation.
+ *
+ * @param props
+ * @constructor
+ */
+export declare const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps>;
+export declare const factory: React.ComponentFactory<Pick<RouteRedirectDxViewProps, "path" | "exact" | "strict" | "to" | "push" | "from" | "initializing" | "historyMax">, React.Component<Pick<RouteRedirectDxViewProps, "path" | "exact" | "strict" | "to" | "push" | "from" | "initializing" | "historyMax">, any, any>>;
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
  *
@@ -46,7 +60,7 @@ export declare const factory: React.ComponentFactory<Pick<RouteRedirectDxViewPro
  * @param S the state object containing the redirect URL
  * @param A the application state type definition or interface
  */
-export declare class RedirectDx<S extends StateObject, A extends StateObject> extends ContainerComponent<RedirectDxProps<S>, WithRouterViewProps, A> {
+export declare class RedirectDx<S extends StateObject, A extends State<null>> extends ContainerComponent<RedirectDxProps<S>, WithRouterViewProps, A> {
     /**
      * Map this component to the state property that holds the application URL.  You can override this method
      * if you want to change where the property is held in state.
