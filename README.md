@@ -3,6 +3,8 @@
 This library provides a manifold-dx state-based mechanism for routing within an application that uses
 React Router, specifically its `<Redirect>` component.
 
+**We are assuming one RedirectDx per application!**
+
 Some advantages to this are:
 1. Redirects can be done consistently throughout your app by creating and dispatching an action, e.g.:
   ```typescript jsx

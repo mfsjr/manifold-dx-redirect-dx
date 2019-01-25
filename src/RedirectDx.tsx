@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Omit, Redirect, RedirectProps, RouteComponentProps, withRouter } from 'react-router';
 import {
-  Action,
   AnyMappingAction,
   ContainerComponent,
   getMappingActionCreator,
-  MappingHook, State, StateCrudAction,
-  StateObject, Store
+  MappingHook, State,
+  StateObject,
 } from 'manifold-dx';
 
 /**
@@ -32,23 +31,29 @@ import {
  *
  */
 
-/**
- * Go through the action history for redirects, return the history of URL's.  Note that the first
- * URL retrieved is meaningless, as its what state was initialized to, not the first app URL hit.
- */
-export function getHistory<S extends StateObject, A extends State<null>>
-(props: RedirectDxProps<S>, store: Store<A>): string[] {
-  // get action history of changes to props.state[props.propertyName]
-  let actions: Action[] = store.getManager().getActionQueue().lastActions();
-  let redirectUrls: string[] = [];
-  actions.forEach((action) => {
-    if (action instanceof StateCrudAction) {
-      if (action.parent === props.redirectDxState && action.propertyName === props.redirectDxProp) {
-        redirectUrls.push(action.getOldValue());
-      }
-    }
-  });
-  return redirectUrls;
+// /**
+//  * Go through the action history for redirects, return the history of URL's.  Note that the first
+//  * URL retrieved is meaningless, as its what state was initialized to, not the first app URL hit.
+//  */
+// export function getHistory<S extends StateObject, A extends State<null>>
+// (props: RedirectDxProps<S>, store: Store<A>): string[] {
+//   // get action history of changes to props.state[props.propertyName]
+//   let actions: Action[] = store.getManager().getActionQueue().lastActions();
+//   let redirectUrls: string[] = [];
+//   actions.forEach((action) => {
+//     if (action instanceof StateCrudAction) {
+//       if (action.parent === props.redirectDxState && action.propertyName === props.redirectDxProp) {
+//         redirectUrls.push(action.getOldValue());
+//       }
+//     }
+//   });
+//   return redirectUrls;
+// }
+
+const history: string[] = [];
+
+export function getHistory() {
+  return history.slice();
 }
 
 /*
@@ -64,6 +69,7 @@ export interface RedirectDxProps<S extends StateObject> extends Partial<Redirect
  */
 interface RedirectDxViewProps extends RedirectProps {
   initializing: boolean;
+  historyMax?: number;
 }
 
 /*tslint:disable:no-any*/
@@ -71,10 +77,23 @@ type AnyRouteComponentProps = RouteComponentProps<any>;
 /*tslint:enable:no-any*/
 
 // enhanced view props (of the component passed into withRouter)
-interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteComponentProps { }
+export interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteComponentProps { }
 
 // enhanced view props (of the component returned by withRouter)
 export type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
+
+// Creating a render object makes spying/testing simple...
+export const render = {
+  redirect: (props: RouteRedirectDxViewProps, historyMax?: number) => {
+    let max: number = historyMax || 20;
+    if (max > 0 && max <= history.length) {
+      history.copyWithin(0, 1);
+    }
+    history.push(props.to.toString());
+    return (<Redirect {...props} />);
+  },
+  nothing: () => (null)
+};
 
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
@@ -87,14 +106,14 @@ export type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteC
  * @param props
  * @constructor
  */
-const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps> = (props: RouteRedirectDxViewProps) => {
+export const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps> = (props: RouteRedirectDxViewProps) => {
   // We'll get warnings if we try to redirect to the same place, so we programmatically prevent that
   let newLocation = props.to !== props.history.location.pathname;
   if (newLocation && !props.initializing) {
-    // history.push(props.to.toString());
-    return (<Redirect {...props} />);
+
+    return render.redirect(props);
   }
-  return (null);
+  return render.nothing();
 };
 
 const WithRouterRedirectDx: React.ComponentClass<WithRouterViewProps> = withRouter(RedirectDxView);
@@ -156,7 +175,8 @@ export class RedirectDx<S extends StateObject, A extends State<null>>
     return {
       ...redirectProps,
       to: this.props.redirectDxProp,
-      initializing: true
+      initializing: true,
+      historyMax: 10
     };
   }
 }

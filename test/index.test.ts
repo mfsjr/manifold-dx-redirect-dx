@@ -1,8 +1,7 @@
 import { RedirectDx } from '../src'
 
-describe("Dummy test", () => {
-  it("finds RedirectDx", () => {
+describe('Instantiate', () => {
+  it('finds RedirectDx', () => {
     expect(RedirectDx).toBeTruthy();
   });
-
-})
+});
