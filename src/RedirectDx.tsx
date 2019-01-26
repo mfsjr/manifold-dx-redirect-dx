@@ -82,7 +82,7 @@ export interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteC
 // enhanced view props (of the component returned by withRouter)
 export type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
 
-// Creating a render object makes spying/testing simple...
+// Creating a render object makes spying/testing a little simpler
 export const render = {
   redirect: (props: RouteRedirectDxViewProps, historyMax?: number) => {
     let max: number = historyMax || 20;

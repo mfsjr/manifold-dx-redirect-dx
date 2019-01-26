@@ -1,13 +1,13 @@
 import { getActionCreator, StateObject } from 'manifold-dx';
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
-import { factory, getHistory, RedirectDx, RedirectDxProps } from '../src'
-import { render, RouteRedirectDxViewProps } from '../src/RedirectDx';
+import { factory, getHistory, RedirectDx, RedirectDxProps } from '../src';
+import { render } from '../src/RedirectDx';
 import { AppState, testStore } from './TestStore';
 
 const enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
-// this is needed to configur
+
 enzyme.configure({ adapter: new Adapter() });
 
 import { JSDOM } from 'jsdom';
@@ -31,14 +31,7 @@ const rdxProps: RedirectDxProps<AppState> = {
 };
 
 /**
- * PROBLEMS:
- * 1. Jest.spyOn works on functions defined on objects, we need to spy on a standalone function.
- *    Our code becomes a little contrived, but more testable, using the RedirectDx.render
- * 2. React is rendering RedirectDx multiple times, and since the view function will only render
- *    if the state is different than React Router's currentPath, we don't get one update per action.
- *    (and if we do attempt to render when state is the same as currentPath, we get browser errors)
- *
- * So, RedirectDx only renders if its state has changed, and its view function is purely based on
+ * RedirectDx only renders if its state has changed, and its view function is purely based on
  * the new state and the existing React Router currentPath.
  *
  * As a result, we need to spy on render and simply count the resulting re-renders of redirect.
@@ -56,15 +49,7 @@ const wrapper = enzyme.mount(
   </MemoryRouter>
 );
 
-let renderHistory: string[] = [];
-const renderDx = render.redirect;
-
-let renderSpy = (props: RouteRedirectDxViewProps) => {
-  renderHistory.push(props.to.toString());
-  return renderDx(props);
-};
-
-render.redirect = renderSpy;
+let spyRender = jest.spyOn(render, 'redirect');
 
 describe('RedirectDx init', () => {
   test('status on first init', () => {
@@ -74,15 +59,16 @@ describe('RedirectDx init', () => {
     expect(rdx).toHaveLength(1);
     let redirect = wrapper.find('Redirect');
     expect(redirect).toHaveLength(0);
-    expect(renderHistory.length).toBe(0);
+    expect(spyRender.mock.calls.length).toBe(0);
   });
   test('second pass with redirect action', () => {
     getActionCreator(rdxProps.redirectDxState).update(rdxProps.redirectDxProp, '/search').dispatch();
     let rdx = wrapper.find('TestRedirectDx');
     expect(rdx).toHaveLength(1);
-    expect(renderHistory.length).toBe(1);
-    expect(renderHistory[0]).toBe('/search');
-    expect(renderHistory[0]).toBe(getHistory()[0]);
+    expect(spyRender.mock.calls.length).toBe(1);
+    let to = spyRender.mock.calls[0][0].to.toString();
+    expect(to).toBe('/search');
+    expect(to).toBe(getHistory()[0]);
   });
   test('third pass with same redirect action', () => {
     // should throw because manifold-dx detects same values
@@ -94,8 +80,9 @@ describe('RedirectDx init', () => {
     getActionCreator(rdxProps.redirectDxState).update(rdxProps.redirectDxProp, '/search/help').dispatch();
     let rdx = wrapper.find('TestRedirectDx');
     expect(rdx).toHaveLength(1);
-    expect(renderHistory.length).toBe(2);
-    expect(renderHistory[1]).toBe('/search/help');
-    expect(renderHistory[1]).toBe(getHistory()[1]);
+    expect(spyRender.mock.calls.length).toBe(2);
+    let to = spyRender.mock.calls[1][0].to.toString();
+    expect(to).toBe('/search/help');
+    expect(to).toBe(getHistory()[1]);
   });
 });
