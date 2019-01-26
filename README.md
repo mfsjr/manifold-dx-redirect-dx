@@ -1,17 +1,35 @@
 # React Router Integration for manifold-dx:  RedirectDx
 
 This library provides a manifold-dx state-based mechanism for routing within an application that uses
-React Router, specifically its `<Redirect>` component.
+React Router, specifically its `<Redirect>` component.  NOTE: we are assuming one RedirectDx per application!
 
-**We are assuming one RedirectDx per application!**
-
-Some advantages to this are:
-1. Redirects can be done consistently throughout your app by creating and dispatching an action, e.g.:
+Some advantages to using this library with manifold-dx are:
+1. Redirects can be done consistently throughout your app using a single line of code, by creating 
+   and dispatching an action, e.g.:
   ```typescript jsx
   getActionCreator(this.appState).update('redirectTo', 'search').dispatch();
   ```
-2. URL changes are integrated into manifold-dx actions, so that action undo/redo will move forward and backward across app URL's as well.
+  Note that this means that you've defined appState to have a string property called 'redirectTo' 
+  that holds the state that will tell React Router where to go.  The appState is a manifold-dx 
+  StateObject, with a 'redirectTo' property which are assigned to the RedirectDxProps, like so:
+  ```typescript jsx
+  <AppRedirectDx redirectDxState={this.appState} redirectDxProp={'redirectTo'} />
+  ```
+2. URL changes are integrated into manifold-dx actions, so that action undo/redo will 
+   move forward and backward across app URL's as well.
 3. Deep linking is unaffected, since this library doesn't do anything until after the app is loaded.
+
+To use this in your application, you need to subclass RedirectDx, handing it your state store and 
+interface defining your app state.  For example, if your export its store as `appStore` and defines 
+its state as `AppState`, this is how you would subclass RedirectDx for your app:
+
+```typescript jsx
+export class AppRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
+constructor(props: RedirectDxProps<S>) {
+    super(props, appStore.getState(), factory);
+  }
+}
+``` 
 
 ## Build instructions
 - upgrade TypeScript to whatever the current version is in manifold-dx (at project start, that was 3.1.6)
