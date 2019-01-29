@@ -20,25 +20,16 @@ Some advantages to using this library with manifold-dx are:
 3. Deep linking is unaffected, since this library doesn't do anything until after the app is loaded.
 
 To use this in your application, you need to subclass RedirectDx, handing it your state store and 
-interface defining your app state.  For example, if your export its store as `appStore` and defines 
+interface descibing your app state.  For example, if you export its Store as `appStore` and defines 
 its state as `AppState`, this is how you would subclass RedirectDx for your app:
 
 ```typescript jsx
 export class AppRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
-constructor(props: RedirectDxProps<S>) {
+  constructor(props: RedirectDxProps<S>) {
     super(props, appStore.getState(), factory);
   }
 }
-``` 
-
-## Build instructions
-- upgrade TypeScript to whatever the current version is in manifold-dx (at project start, that was 3.1.6)
-  `npm instal --save-dev typescript@3.1.6`
-- React router: `npm install --save react-router @types/react-router`
-- manifold-dx: `npm install --save manifold-dx@0.9.1`
-- Need to allow/fix jsx, by adding this line to tsconfig.json: `"jsx": "preserve"`
-
-
+```
 ## This project is based off of the TypeScript Library Starter
 
 A starter project that makes creating a TypeScript library extremely easy.  See

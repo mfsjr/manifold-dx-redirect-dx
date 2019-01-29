@@ -81,7 +81,7 @@ function getHistory() {
     return history.slice();
 }
 exports.getHistory = getHistory;
-// Creating a render object makes spying/testing simple...
+// Creating a render object makes spying/testing a little simpler
 exports.render = {
     redirect: function (props, historyMax) {
         var max = historyMax || 20;
