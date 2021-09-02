@@ -1,14 +1,14 @@
 import { State, Store } from 'manifold-dx'
 
 export interface AppState extends State<null> {
-  redirectTo: string;
-  username?: string;
+  redirectTo: string
+  username?: string
 }
 
 const appState: AppState = {
   _parent: null,
   _myPropname: '',
-  redirectTo: '',
+  redirectTo: ''
 }
 
-export const testStore = new Store(appState, {});
+export const testStore = new Store(appState, {})

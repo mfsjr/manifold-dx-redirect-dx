@@ -113,7 +113,7 @@
     "lodash.camelcase": "^4.3.0",
     "prettier": "^1.14.3",
     "prompt": "^1.0.0",
-    "react-dom": "^16.7.0",
+    "react-dom": "^16.7.0 || ^17.0",
     "replace-in-file": "^3.4.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.0",
@@ -134,10 +134,17 @@
     "typescript": "^3.1.6"
   },
   "peerDependencies": {
-    "@types/react": "^16.7.20",
-    "@types/react-router": "^4.4.3",
-    "manifold-dx": "^0.9.3",
-    "react": "^16.7.0",
+    "@types/react": "^16.7.20 || ^17.0",
+    "@types/react-router": "^4.4.3 || ^5.0",
+    "manifold-dx": "^0.9.3 || ^1.0",
+    "react": "^16.7.0 || ^17.0",
     "react-router": "^4.3.1"
+  },
+  "dependencies": {
+    "@types/react": "^16.9.43",
+    "@types/react-router": "^5.1.16",
+    "manifold-dx": "^1.1.24",
+    "react": "^17.0.2",
+    "react-router": "^5.2.1"
   }
 }
