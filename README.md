@@ -7,7 +7,7 @@ Some advantages to using this library with manifold-dx are:
 1. Redirects can be done consistently throughout your app using a single line of code, by creating 
    and dispatching an action, e.g.:
   ```typescript jsx
-  getActionCreator(this.appState).update('redirectTo', 'search').dispatch();
+  getActionCreator(this.appState).set('redirectTo', 'search').dispatch();
   ```
   Note that this means that you've defined appState to have a string property called 'redirectTo' 
   that holds the state that will tell React Router where to go.  The appState is a manifold-dx 

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Omit, Redirect, RedirectProps, RouteComponentProps, withRouter } from 'react-router';
 import {
   AnyMappingAction,
-  ContainerComponent,
+  ContainerComponent, ContainerPostReducer,
   getMappingActionCreator,
-  MappingHook, State,
-  StateObject,
+  State,
+  StateObject
 } from 'manifold-dx';
 
 /**
@@ -56,6 +56,14 @@ export function getHistory() {
   return history.slice();
 }
 
+// /** from manifold-dx
+//  * Extract keys (which are strings) whose value's types match the type of S[K].
+//  * See "Conditional types are particularly useful when combined with mapped types:"
+//  * in https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html
+//  */
+// export type ExtractMatching<S, K extends Extract<keyof S, string>, VP> =
+//   { [TP in Extract<keyof VP, string>]: VP[TP] extends S[K] ? TP : never; } [Extract<keyof VP, string>];
+
 /*
  * Container props
  */
@@ -92,7 +100,7 @@ export const render = {
     history.push(props.to.toString());
     return (<Redirect {...props} />);
   },
-  nothing: () => (null)
+  nothing: () => null
 };
 
 /**
@@ -158,11 +166,13 @@ export class RedirectDx<S extends StateObject, A extends State<null>>
    * @param mappingActions
    */
   protected appendToMappingActions(mappingActions: AnyMappingAction[]): void {
-    const initFn: MappingHook = action => {
+    const initFn: ContainerPostReducer = action => {
       this.viewProps.initializing = false;
     };
     mappingActions.push(
       getMappingActionCreator(this.props.redirectDxState, this.props.redirectDxProp)
+        // @ts-ignore   manifold-dx uses ExtractMatching (mapped conditional types) for exhaustive source/target
+        // type-matching we don't need, by defn `redirectDxProp: Extract<keyof S, string>;` ie, string to string
         .createPropertyMappingAction(this, 'to', initFn)
     );
   }

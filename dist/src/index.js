@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getHistory = exports.factory = exports.RedirectDx = void 0;
 var RedirectDx_1 = require("./RedirectDx");
-exports.RedirectDx = RedirectDx_1.RedirectDx;
-exports.getHistory = RedirectDx_1.getHistory;
-exports.factory = RedirectDx_1.factory;
+Object.defineProperty(exports, "RedirectDx", { enumerable: true, get: function () { return RedirectDx_1.RedirectDx; } });
+Object.defineProperty(exports, "getHistory", { enumerable: true, get: function () { return RedirectDx_1.getHistory; } });
+Object.defineProperty(exports, "factory", { enumerable: true, get: function () { return RedirectDx_1.factory; } });
 //# sourceMappingURL=index.js.map

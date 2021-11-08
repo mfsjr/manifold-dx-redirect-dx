@@ -3,10 +3,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -28,11 +30,14 @@ var __rest = (this && this.__rest) || function (s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.RedirectDx = exports.factory = exports.RedirectDxView = exports.render = exports.getHistory = void 0;
 var React = require("react");
 var react_router_1 = require("react-router");
 var manifold_dx_1 = require("manifold-dx");
@@ -91,7 +96,7 @@ exports.render = {
         history.push(props.to.toString());
         return (React.createElement(react_router_1.Redirect, __assign({}, props)));
     },
-    nothing: function () { return (null); }
+    nothing: function () { return null; }
 };
 /**
  * This is a functional component that shows how React's "createFactory" api can be used to handle either
@@ -104,7 +109,7 @@ exports.render = {
  * @param props
  * @constructor
  */
-exports.RedirectDxView = function (props) {
+var RedirectDxView = function (props) {
     // We'll get warnings if we try to redirect to the same place, so we programmatically prevent that
     var newLocation = props.to !== props.history.location.pathname;
     if (newLocation && !props.initializing) {
@@ -112,6 +117,7 @@ exports.RedirectDxView = function (props) {
     }
     return exports.render.nothing();
 };
+exports.RedirectDxView = RedirectDxView;
 var WithRouterRedirectDx = react_router_1.withRouter(exports.RedirectDxView);
 exports.factory = React.createFactory(WithRouterRedirectDx);
 /**
@@ -159,6 +165,8 @@ var RedirectDx = /** @class */ (function (_super) {
             _this.viewProps.initializing = false;
         };
         mappingActions.push(manifold_dx_1.getMappingActionCreator(this.props.redirectDxState, this.props.redirectDxProp)
+            // @ts-ignore   manifold-dx uses ExtractMatching (mapped conditional types) for exhaustive source/target
+            // type-matching we don't need, by defn `redirectDxProp: Extract<keyof S, string>;` ie, string to string
             .createPropertyMappingAction(this, 'to', initFn));
     };
     /**
@@ -166,7 +174,7 @@ var RedirectDx = /** @class */ (function (_super) {
      */
     RedirectDx.prototype.createViewProps = function () {
         var _a = this.props, children = _a.children, redirectDxState = _a.redirectDxState, redirectDxProp = _a.redirectDxProp, redirectProps = __rest(_a, ["children", "redirectDxState", "redirectDxProp"]);
-        return __assign({}, redirectProps, { to: this.props.redirectDxProp, initializing: true, historyMax: 10 });
+        return __assign(__assign({}, redirectProps), { to: this.props.redirectDxProp, initializing: true, historyMax: 10 });
     };
     return RedirectDx;
 }(manifold_dx_1.ContainerComponent));
