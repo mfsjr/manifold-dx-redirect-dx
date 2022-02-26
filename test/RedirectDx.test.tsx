@@ -1,7 +1,7 @@
 import { getActionCreator, StateObject } from 'manifold-dx';
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
-import { factory, getHistory, RedirectDx, RedirectDxProps } from '../src';
+import { getHistory, RedirectDx, RedirectDxProps, WithRouterRedirectDx } from '../src';
 import { render } from '../src/RedirectDx';
 import { AppState, testStore } from './TestStore';
 
@@ -39,7 +39,7 @@ const rdxProps: RedirectDxProps<AppState> = {
 
 class TestRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
   constructor(_props: RedirectDxProps<S>) {
-    super(_props, testStore.getState(), factory);
+    super(_props, testStore.getState(), undefined, WithRouterRedirectDx);
   }
 }
 

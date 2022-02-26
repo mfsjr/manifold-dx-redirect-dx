@@ -26,7 +26,7 @@ its state as `AppState`, this is how you would subclass RedirectDx for your app:
 ```typescript jsx
 export class AppRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
   constructor(props: RedirectDxProps<S>) {
-    super(props, appStore.getState(), factory);
+    super(props, appStore.getState(), undefined, WithRouterRedirectDx);  // <== NEW! React.createFactory deprecated
   }
 }
 ```
