@@ -26,10 +26,23 @@ its state as `AppState`, this is how you would subclass RedirectDx for your app:
 ```typescript jsx
 export class AppRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
   constructor(props: RedirectDxProps<S>) {
-    super(props, appStore.getState(), undefined, WithRouterRedirectDx);  // <== NEW! React.createFactory deprecated
+    super(props, appStore.getState(), undefined, WithRouterRedirectDx); 
   }
 }
 ```
+
+Note that the above snippet has been updated from an older way of doing the same thing.  The React
+Team **deprecated** the React.createFactory method.  The old, deprecated style is given below,
+while the fixed updated version is given above.
+
+```typescript jsx
+export class AppRedirectDx<S extends StateObject> extends RedirectDx<S, AppState> {
+  constructor(props: RedirectDxProps<S>) {
+    super(props, appStore.getState(), factory);  
+  }
+}
+```
+
 ## This project is based off of the TypeScript Library Starter
 
 A starter project that makes creating a TypeScript library extremely easy.  See
