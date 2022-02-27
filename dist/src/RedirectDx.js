@@ -37,7 +37,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RedirectDx = exports.factory = exports.RedirectDxView = exports.render = exports.getHistory = void 0;
+exports.RedirectDx = exports.factory = exports.WithRouterRedirectDx = exports.RedirectDxView = exports.render = exports.getHistory = void 0;
 var React = require("react");
 var react_router_1 = require("react-router");
 var manifold_dx_1 = require("manifold-dx");
@@ -118,8 +118,8 @@ var RedirectDxView = function (props) {
     return exports.render.nothing();
 };
 exports.RedirectDxView = RedirectDxView;
-var WithRouterRedirectDx = react_router_1.withRouter(exports.RedirectDxView);
-exports.factory = React.createFactory(WithRouterRedirectDx);
+exports.WithRouterRedirectDx = react_router_1.withRouter(exports.RedirectDxView);
+exports.factory = React.createFactory(exports.WithRouterRedirectDx);
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
  *

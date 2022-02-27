@@ -30,6 +30,7 @@ export declare const render: {
  * @constructor
  */
 export declare const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps>;
+export declare const WithRouterRedirectDx: React.ComponentClass<WithRouterViewProps>;
 export declare const factory: React.CFactory<Pick<RouteRedirectDxViewProps, "push" | "path" | "exact" | "strict" | "to" | "from" | "initializing" | "historyMax">, React.Component<Pick<RouteRedirectDxViewProps, "push" | "path" | "exact" | "strict" | "to" | "from" | "initializing" | "historyMax">, any, any>>;
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
