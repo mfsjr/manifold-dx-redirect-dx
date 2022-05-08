@@ -126,8 +126,6 @@ export const RedirectDxView: React.FunctionComponent<RouteRedirectDxViewProps> =
 
 export const WithRouterRedirectDx: React.ComponentClass<WithRouterViewProps> = withRouter(RedirectDxView);
 
-export const factory = React.createFactory(WithRouterRedirectDx);
-
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
  *

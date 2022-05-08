@@ -1,9 +1,3 @@
-import {
-  RedirectDx,
-  getHistory,
-  factory,
-  RedirectDxProps,
-  WithRouterRedirectDx
-} from './RedirectDx'
+import { RedirectDx, getHistory, RedirectDxProps, WithRouterRedirectDx } from './RedirectDx'
 
-export { RedirectDx, factory, WithRouterRedirectDx, RedirectDxProps, getHistory }
+export { RedirectDx, WithRouterRedirectDx, RedirectDxProps, getHistory }
