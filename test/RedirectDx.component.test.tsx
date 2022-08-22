@@ -10,11 +10,11 @@ const Adapter = require('@wojtekmaj/enzyme-adapter-react-17');
 
 enzyme.configure({ adapter: new Adapter() });
 
-import { JSDOM } from 'jsdom';
-const { window } = new JSDOM('<!doctype html><html><body></body></html>');
+import { JSDOM, DOMWindow } from 'jsdom';
+const { window } = new JSDOM('<!doctype html><html lang="en"><body></body></html>');
 export interface Global {
   document: Document;
-  window: Window;
+  window: Window | DOMWindow;
   navigator: {
     userAgent: string;
   };

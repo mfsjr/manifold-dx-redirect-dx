@@ -118,7 +118,7 @@ var RedirectDxView = function (props) {
     return exports.render.nothing();
 };
 exports.RedirectDxView = RedirectDxView;
-exports.WithRouterRedirectDx = react_router_1.withRouter(exports.RedirectDxView);
+exports.WithRouterRedirectDx = (0, react_router_1.withRouter)(exports.RedirectDxView);
 /**
  * The component the app should subclass to redirect based upon the URL as maintained in manifold-dx's app state.
  *
@@ -163,7 +163,7 @@ var RedirectDx = /** @class */ (function (_super) {
         var initFn = function (action) {
             _this.viewProps.initializing = false;
         };
-        mappingActions.push(manifold_dx_1.getMappingActionCreator(this.props.redirectDxState, this.props.redirectDxProp)
+        mappingActions.push((0, manifold_dx_1.getMappingActionCreator)(this.props.redirectDxState, this.props.redirectDxProp)
             // @ts-ignore   manifold-dx uses ExtractMatching (mapped conditional types) for exhaustive source/target
             // type-matching we don't need, by defn `redirectDxProp: Extract<keyof S, string>;` ie, string to string
             .createPropertyMappingAction(this, 'to', initFn));

@@ -15,7 +15,7 @@ export interface RouteRedirectDxViewProps extends RedirectDxViewProps, AnyRouteC
 }
 export declare type WithRouterViewProps = Omit<RouteRedirectDxViewProps, keyof AnyRouteComponentProps>;
 export declare const render: {
-    redirect: (props: RouteRedirectDxViewProps, historyMax?: number | undefined) => JSX.Element;
+    redirect: (props: RouteRedirectDxViewProps, historyMax?: number) => JSX.Element;
     nothing: () => null;
 };
 /**
